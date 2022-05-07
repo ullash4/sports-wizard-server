@@ -1,12 +1,11 @@
 // Fundamental setup
 const express = require('express');
 const cors = require('cors')
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 require('dotenv').config()
 
-//ullash
-//H6x-CgEb9Hwq.9G
 
 //Middlewar
 app.use(cors())
@@ -15,15 +14,30 @@ app.use(express.json())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://ullash:H6x-CgEb9Hwq.9G@cluster0.1hpxp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.1hpxp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  console.log('mongodb connected');
-  // perform actions on the collection object
-  client.close();
-});
+
+async function run() {
+    try{
+        // basic formations
+        await client.connect();
+        const productCollection = client.db("sportsWizard").collection("product")
+
+        // get all data
+        app.get("/product", async(req, res)=>{
+            const query = {}
+            const cursor = productCollection.find(query)
+            const product = await cursor.toArray();
+            res.send(product)
+        })
+
+    } finally {
+        // await client.close();
+    }
+}
+
+run().catch(console.dir);
 
 
 
