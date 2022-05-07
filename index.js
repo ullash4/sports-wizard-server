@@ -40,6 +40,13 @@ async function run() {
             res.send(item)
         })
 
+        // Add new item
+        app.post("/product", async(req, res)=>{
+            const newProduct = req.body;
+            const result = await productCollection.insertOne(newProduct)
+            res.send(result);
+        })
+
     } finally {
         // await client.close();
     }
