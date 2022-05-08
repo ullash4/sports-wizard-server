@@ -32,6 +32,15 @@ async function run() {
             res.send(product)
         })
 
+        // get my item
+        app.get("/product", async(req, res)=>{
+            const email = req.query.email;
+            const query = {email}
+            const cursor = productCollection.find(query)
+            const product = await cursor.toArray();
+            res.send(product)
+        })
+
         // get single product
         app.get("/product/:id", async(req, res)=>{
             const id = req.params.id;
@@ -55,15 +64,15 @@ async function run() {
             res.send(result);
         })
 
-        //Update or restock quantity
+        //Deliverd 1 item
         app.put("/product/:id", async(req, res)=>{
             const id = req.params.id;
-            const updatedQty = req.body;
+            const deliveredQty = req.body;
             const filter = {_id: ObjectId(id)}
             const options = { upsert: true };
             const updatedDoc={
                 $set: {
-                    quantity: updatedQty.result
+                    quantity: deliveredQty.result
                 }
             };
             const result = await productCollection.updateOne(filter, updatedDoc, options)
