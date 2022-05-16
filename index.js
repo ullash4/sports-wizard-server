@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 
 
-
+//hlw threre
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.1hpxp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
